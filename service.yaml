@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-service-demo
+  resourceVersion: some-string
+  namespace: training # Default: default
+  # uid: this-will-be-generated-by-kubernetes # to distinquish between objects of same name deleted and recreated
+  labels: # to organize and categorize objects
+    key: value
+  annotations: # used by external tools to store and retrieve arbitrary metadata of this object
+    key: value
+  # creationTimestamp: 
+  # deletionTimestamp: Set by system. It's max time by which this object will be deleted. Itcan be reduced but will never be extended.
+  # generation: 0 # set by system and monotonically increasing per resource
+spec:
+  type: ClusterIP # default: exposes a set of podsto other objects in cluster 
+  # type: LoadBalancer # deprecated: Legacy way of getting n/w traffic into cluster by setting up LB from external cloud provider, like AWS, whoever uses it.
+  # type: NodePort # Exposes set of pods to outside world (Used in development)
+  # type: ExternalName
+  selector:
+    abc: def
+  ports:
+    - port: 3006
+      targetPort: 3006
+      protocol: TCP
+      name: target-port
+  

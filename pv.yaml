@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: task-pv-volume
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 10Gi
+  volumeMode: Filesystem # Filesystem implicit if not specified
+  accessModes:
+    - ReadWriteOnce
+    # - ReadOnlyMany
+    # - ReadWriteMany
+  # persistentVolumeReclaimPolicy: Retain (manual reclaimation) 
+  persistentVolumeReclaimPolicy: Recycle # (rm -rf /mnt/data/*)
+  # persistentVolumeReclaimPolicy: Delete (associated storage volume deleted)
+  hostPath:
+    path: "/mnt/data"

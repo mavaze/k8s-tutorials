@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3     # Defines number of pod replicas to be spawned
+  strategy:
+    rollingUpdate:  # Default strategy which replaces existing pods witg new version one by one - No downtime
+      maxSurge: 1   # max pods allowed to create at one time (number or percentage)
+      maxUnavailable: 5 # max pods allowed to be unavailable during rollout (number or percentage)
+    type: Recreate  # shuts down all old pods and replaces them with new ones - Downtime
+  selector:       # Defines how Deployment finds which pods to manage
+                  # Both matchLabels and matchExpressions conditions must be satisfied
+    matchLabels:
+      app: nginx  # Equivalent to matchExpressions('app' In 'nginx')
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - nginx
+  template:
+    metadata:
+      labels:         # Pod with label app=nginx
+        app: nginx
+    spec:             # This is PodTemplateSpec
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
